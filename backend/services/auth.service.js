@@ -2,6 +2,8 @@ import { getDb } from '../configs/mongodb.config.js';
 import { issueAccessToken } from '../helpers/auth.helper.js';
 import bcrypt from 'bcryptjs';
 
+const SALT_ROUNDS = parseInt(process.env.BCRYPT_ROUNDS, 10) || 12;
+
 // ─────────── LOGIN ───────────
 const login = async (data) => {
   const db = getDb();
@@ -52,7 +54,7 @@ const register = async (data) => {
   }
 
   // Hashear contraseña
-  const hashedPassword = await bcrypt.hash(data.password, 12);
+  const hashedPassword = await bcrypt.hash(data.password, SALT_ROUNDS);
 
   // Crear nuevo usuario
   const newUser = {

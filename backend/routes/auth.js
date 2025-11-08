@@ -2,6 +2,10 @@ import express from 'express';
 import { SignJWT } from 'jose';
 import { ObjectId } from 'mongodb';
 import { auth } from '../middleware/auth.js';
+import bcrypt from 'bcryptjs';
+
+// Salt rounds configurable via .env (BCRYPT_ROUNDS), default 12
+const SALT_ROUNDS = parseInt(process.env.BCRYPT_ROUNDS, 10) || 12;
 
 const router = express.Router();
 
@@ -25,10 +29,13 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'El usuario ya existe' });
     }
 
+    // Hashear la contraseña antes de guardar
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
     const newUser = {
       email,
       name,
-      password, // ⚠️ EN PRODUCCIÓN: Debes hashear la contraseña con bcrypt
+      password: hashedPassword,
       role: 'user',
       purchasedGames: [],
       createdAt: new Date()
@@ -77,8 +84,9 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Credenciales inválidas' });
     }
 
-    // EN PRODUCCIÓN: Comparar con bcrypt
-    if (user.password !== password) {
+    // Comparar contraseña usando bcrypt
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res.status(400).json({ message: 'Credenciales inválidas' });
     }
 

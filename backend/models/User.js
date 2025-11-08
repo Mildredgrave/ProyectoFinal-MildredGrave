@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
+// Configurable salt rounds for bcrypt (use .env BCRYPT_ROUNDS), default to 12
+const SALT_ROUNDS = parseInt(process.env.BCRYPT_ROUNDS, 10) || 12;
+
 const userSchema = new mongoose.Schema({
   email: { 
     type: String, 
@@ -34,7 +37,12 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 12);
+    // Si la contraseña ya tiene formato bcrypt, no volver a hashearla.
+    if (typeof this.password === 'string' && /^\$2[aby]\$/.test(this.password)) {
+      return next();
+    }
+  
+    this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
   next();
 });
 
