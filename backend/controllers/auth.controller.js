@@ -6,7 +6,7 @@ import { verifyAccessToken } from '../helpers/auth.helper.js';
 
 const schemaAuth = joi.object({
   email: joi.string().email().required(),
-  password: joi.string().min(1).max(100).required()
+  password: joi.string().min(8).max(100).required()
 });
 
 

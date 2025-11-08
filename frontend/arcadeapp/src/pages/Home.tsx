@@ -46,7 +46,7 @@ export const Home: React.FC = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-white mb-4">
-            BIENVENIDO A ARCADE
+            BIENVENIDO A ARCADESTORE
           </h1>
           <p className="text-xl text-white-200">
             Descubre los mejores videojuegos para todas las plataformas

@@ -15,7 +15,7 @@ export const Header: React.FC = () => {
     <div className="navbar bg-purple-600 text-purple-50 shadow-lg">
       <div className="flex-1">
         <Link to="/" className="btn btn-ghost normal-case text-xl text-purple-50 hover:text-white">
-          TIENDA
+          ARCADESTORE
         </Link>
       </div>
       <div className="flex-none gap-2">

@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 import { auth } from '../middleware/auth.js';
 import bcrypt from 'bcryptjs';
 
-// Salt rounds configurable via .env (BCRYPT_ROUNDS), default 12
+
 const SALT_ROUNDS = parseInt(process.env.BCRYPT_ROUNDS, 10) || 12;
 
 const router = express.Router();
